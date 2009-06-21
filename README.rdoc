@@ -20,7 +20,7 @@ Moqueue is a library for mocking the various objects that make up the ruby AMQP[
   # cats.inUrFridge
   # eatin ur foodz
   
-Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests, maybe with cucumber, that run your code without any mocks or stubs so you can be sure everything works.
+Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests without any mocks or stubs so you can be sure everything works with real MQ objects. With that said, <tt>#overload_amqp</tt> does overload the <tt>AMQP.start</tt> method, so you can use Moqueue for mid-level testing if desired. Have a look at the spec/examples directory to see Moqueue running some of AMQP's examples in full-mocking mode for more demonstration of this.
 
 = What's Working?
 As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, and topic queues.
