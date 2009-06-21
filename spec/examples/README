@@ -1,0 +1,2 @@
+Specs in this directory track the examples from the amqp library in order to
+drive full mock-ability of AMQP's features
