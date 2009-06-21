@@ -83,8 +83,13 @@ describe MockQueue do
     @queue.received_message?("save me!").should be_true
   end
   
-  it "should respond to #unsubscribe" do
+  it "should #unsubscribe" do
+    pending ("should really remove the association with exchange")
     @queue.should respond_to(:unsubscribe)
+  end
+  
+  it "should raise an error on double subscribe" do
+    pending
   end
   
   it "should emulate direct exchange publishing" do
