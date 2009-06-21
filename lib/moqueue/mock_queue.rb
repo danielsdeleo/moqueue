@@ -1,7 +1,7 @@
 module Moqueue
   
   class MockQueue
-    attr_reader :name, :unhandled_messages
+    attr_reader :name
     
     class << self
       
