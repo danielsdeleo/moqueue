@@ -28,13 +28,11 @@ module Moqueue
     def receive(message, header_opts={})
       if callback = message_handler_callback
         headers = MockHeaders.new(header_opts)
-        callback.call *(callback.arity == 1 ? [message] : [headers, message])
+        callback.call(*(callback.arity == 1 ? [message] : [headers, message]))
         received_messages << message
         @ack_msgs && headers.received_ack? ? message : nil
       else
-        deferred_publishing_fibers << Fiber.new do
-          self.receive(message)
-        end
+        receive_message_later(message, header_opts)
       end
     end
     
@@ -66,6 +64,12 @@ module Moqueue
     end
     
     private
+    
+    def receive_message_later(message, header_opts)
+      deferred_publishing_fibers << Fiber.new do
+        self.receive(message, header_opts)
+      end
+    end
     
     def received_messages
       @received_messages ||= []

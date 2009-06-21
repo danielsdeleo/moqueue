@@ -12,8 +12,8 @@ module Moqueue
       MockQueue.new(name || "anonymous")
     end
     
-    def mock_exchange
-      MockExchange.new
+    def mock_exchange(opts={})
+      MockExchange.new(opts)
     end
     
     def overload_amqp

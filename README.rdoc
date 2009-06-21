@@ -8,19 +8,24 @@ Moqueue is a library for mocking the various objects that make up the ruby AMQP[
   
   mq = MQ.new
   => #<MQ:0x1197ae8>
+  
   queue = mq.queue("mocktacular")
   => #<Moqueue::MockQueue:0x1194550 @name="mocktacular">
+  
   topic = mq.topic("lolz")
   => #<Moqueue::MockExchange:0x11913dc @topic="lolz">
+  
   queue.bind(topic, :key=> "cats.*")
   => #<Moqueue::MockQueue:0x1194550 @name="mocktacular">
+  
   queue.subscribe {|header, msg| puts [header.routing_key, msg]}
   => nil
+  
   topic.publish("eatin ur foodz", :key => "cats.inUrFridge")
   # cats.inUrFridge
   # eatin ur foodz
   
-Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests without any mocks or stubs so you can be sure everything works with real MQ objects. With that said, <tt>#overload_amqp</tt> does overload the <tt>AMQP.start</tt> method, so you can use Moqueue for mid-level testing if desired. Have a look at the spec/examples directory to see Moqueue running some of AMQP's examples in full-mocking mode for more demonstration of this.
+Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests without any mocks or stubs so you can be sure everything works with real MQ objects. With that said, <tt>#overload_amqp</tt> does overload the <tt>AMQP.start</tt> method, so you can use Moqueue for mid-level testing if desired. Have a look at the spec/examples directory to see Moqueue running some of AMQP's examples in overload mode for more demonstration of this.
 
 = What's Working? What's Not?
 As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, and topic queues.
@@ -28,5 +33,10 @@ As you can tell from the example above, quite a bit is working. This includes di
 What's not working includes fanout exchanges and RPC exchanges. There may also be some quirks with the routing key matching algorithm, and receiving acks when using topic exchanges. 
 
 There are some things that Moqueue may never be able to do. As one prominent example, for queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option), the behavior on shutdown is not emulated correctly.
+
+== TODOs
+* Rspec matchers for sugary syntax, i.e. <tt>queue.should have_received_message("oh yeeaahh!")</tt>
+* Mocha-style expectation syntax, i.e. <tt>queue.expects_message("yessss").with_routing_key("awesome.yesItIs")</tt>
+* Support for the above-mentioned exchange types
 
 As always, you're invited to git yer fork on if you want to work on any of these.

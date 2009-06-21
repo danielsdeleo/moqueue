@@ -37,19 +37,21 @@ module Moqueue
     end
     
     def publish(message, opts={})
-      header_opts = prepare_header_opts(opts)
       require_routing_key(opts) if topic
       matching_queues(opts).each do |q| 
-        response = q.receive(message, header_opts)
-        acked_messages << response if response
+        ack_message(q.receive(message, prepare_header_opts(opts)))
       end
     end
     
     def received_ack_for_message?(message)
       acked_messages.include?(message)
     end
-    
+        
     private
+    
+    def ack_message(message)
+      acked_messages << message if message
+    end
     
     def routing_keys_match?(binding_key, message_key)
       BindingKey.new(binding_key).matches?(message_key)
@@ -57,7 +59,7 @@ module Moqueue
     
     def matching_queues(opts={})
       return attached_queues unless topic
-      attached_queues.select { |q, binding| binding.matches?(opts[:key])}.map { |q, bind| q }
+      attached_queues.map {|q, binding| binding.matches?(opts[:key]) ? q : nil}.compact
     end
     
     def prepare_header_opts(opts={})
