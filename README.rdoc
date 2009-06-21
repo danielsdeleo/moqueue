@@ -27,6 +27,6 @@ As you can tell from the example above, quite a bit is working. This includes di
 
 What's not working includes fanout exchanges and RPC exchanges. There may also be some quirks with the routing key matching algorithm, and receiving acks when using topic exchanges. 
 
-There are some things that Moqueue may never be able to do. As one prominent example, the behavior of queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option) on shutdown, is not emulated correctly.
+There are some things that Moqueue may never be able to do. As one prominent example, for queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option), the behavior on shutdown is not emulated correctly.
 
 As always, you're invited to git yer fork on if you want to work on any of these.
