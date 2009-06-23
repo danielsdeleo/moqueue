@@ -27,6 +27,13 @@ Moqueue is a library for mocking the various objects that make up the ruby AMQP[
   
 Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests without any mocks or stubs so you can be sure everything works with real MQ objects. With that said, <tt>#overload_amqp</tt> does overload the <tt>AMQP.start</tt> method, so you can use Moqueue for mid-level testing if desired. Have a look at the spec/examples directory to see Moqueue running some of AMQP's examples in overload mode for more demonstration of this.
 
+= Custom Rspec Matchers
+For Test::Unit users, Moqueue's default syntax should be a good fit with <tt>assert()</tt>:
+  assert(queue.received_message?("eatin ur foodz"))
+Rspec users will probably want something a bit more natural language-y. You got it:
+  queue.should have_received("a message")
+  queue.should have_ack_for("a different message")
+
 = What's Working? What's Not?
 As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, and topic queues.
 
@@ -35,8 +42,7 @@ What's not working includes fanout exchanges and RPC exchanges. There may also b
 There are some things that Moqueue may never be able to do. As one prominent example, for queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option), the behavior on shutdown is not emulated correctly.
 
 == TODOs
-* Rspec matchers for sugary syntax, i.e. <tt>queue.should have_received_message("oh yeeaahh!")</tt>
 * Mocha-style expectation syntax, i.e. <tt>queue.expects_message("yessss").with_routing_key("awesome.yesItIs")</tt>
 * Support for the above-mentioned exchange types
 
-As always, you're invited to git yer fork on if you want to work on any of these.
+As always, you're invited to git yer fork on if you want to work on any of these. If you find a bug that you can't source or want to send love or hate mail, you can contact me directly at dan@kallistec.com
