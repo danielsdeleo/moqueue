@@ -40,3 +40,21 @@ describe "AMQP", "when mocked out by Moqueue" do
   end
   
 end
+
+describe Moqueue, "when using custom rspec matchers" do
+  
+  it "should accept syntax like queue.should have_received('a message')" do
+    queue = mock_queue("sugary")
+    queue.subscribe { |msg| "eat the message" }
+    queue.publish("a message")
+    queue.should have_received("a message")
+  end
+  
+  it "should accept syntax like queue_or_exchange.should have_ack_for('a message')" do
+    queue = mock_queue("more sugar")
+    queue.subscribe(:ack => true) { |headers, msg| headers.ack }
+    queue.publish("another message")
+    queue.should have_ack_for("another message")
+  end
+  
+end
