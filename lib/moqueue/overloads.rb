@@ -13,6 +13,9 @@ class MQ
 
   end
   
+  def initialize(*args)
+  end
+  
   def queue(name)
     Moqueue::MockQueue.new(name)
   end
