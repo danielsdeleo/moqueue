@@ -39,6 +39,18 @@ describe "AMQP", "when mocked out by Moqueue" do
     topic.received_ack_for_message?("OMG kittehs!").should be_true
   end
   
+  it "should have fanout exchanges" do
+    film = mock_exchange(:fanout => "Godfather")
+    one_actor = mock_queue("Jack Woltz")
+    other_actor = mock_queue("Captain McCluskey")
+    one_actor.bind(film).subscribe { |msg| "horse head" }
+    other_actor.bind(film).subscribe { |msg| "dirty cops"  }
+    offer = "you can't refuse"
+    film.publish(offer)
+    one_actor.received_message?(offer).should be_true
+    other_actor.received_message?(offer).should be_true
+  end
+  
 end
 
 describe Moqueue, "with syntax sugar" do

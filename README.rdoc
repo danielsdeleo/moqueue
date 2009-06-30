@@ -35,14 +35,23 @@ Rspec users will probably want something a bit more natural language-y. You got 
   queue.should have_ack_for("a different message")
 
 = What's Working? What's Not?
-As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, and topic queues.
+As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, topic exchanges, and fanout exchanges.
 
-What's not working includes fanout exchanges and RPC exchanges. There may also be some quirks with the routing key matching algorithm, and receiving acks when using topic exchanges. 
+What's not working: 
+* RPC exchanges. 
+* The routing key matching algorithm works for common cases, including "*" and "#" wildcards in the binding key. If you need anything more complicated than that, Moqueue is not guaranteed to do the right thing.
+* Receiving acks when using topic exchanges works only if you subscribe before publishing.
 
 There are some things that Moqueue may never be able to do. As one prominent example, for queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option), the behavior on shutdown is not emulated correctly.
 
 == TODOs
 * Mocha-style expectation syntax, i.e. <tt>queue.expects_message("yessss").with_routing_key("awesome.yesItIs")</tt>
-* Support for the above-mentioned exchange types
+* Support for RPC exchanges
+* Make it pretty on the inside.
+
+== Moar
+I wrote an introductory post on my blog, it's probably the best source of high-level discussion right now. Visit: http://kallistec.com/2009/06/21/introducing-moqueue/
+
+If you prefer code over drivel, look at the specs under spec/examples. There you'll find some of the examples from the amqp library running completely Moqueue-ified; the basic_usage_spec.rb shows some lower-level use.
 
 As always, you're invited to git yer fork on if you want to work on any of these. If you find a bug that you can't source or want to send love or hate mail, you can contact me directly at dan@kallistec.com
