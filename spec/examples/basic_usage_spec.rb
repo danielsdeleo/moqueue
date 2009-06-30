@@ -39,16 +39,17 @@ describe "AMQP", "when mocked out by Moqueue" do
     topic.received_ack_for_message?("OMG kittehs!").should be_true
   end
   
-  it "should have fanout exchanges" do
+  it "should have fanout exchanges with acks" do
     film = mock_exchange(:fanout => "Godfather")
     one_actor = mock_queue("Jack Woltz")
     other_actor = mock_queue("Captain McCluskey")
-    one_actor.bind(film).subscribe { |msg| "horse head" }
-    other_actor.bind(film).subscribe { |msg| "dirty cops"  }
+    one_actor.bind(film).subscribe(:ack =>true) { |h,msg| h.ack && "horse head" }
+    other_actor.bind(film).subscribe(:ack => true) { |h,msg| h.ack && "dirty cops"  }
     offer = "you can't refuse"
     film.publish(offer)
     one_actor.received_message?(offer).should be_true
     other_actor.received_message?(offer).should be_true
+    film.should have(2).acked_messages
   end
   
 end
@@ -73,7 +74,7 @@ describe Moqueue, "with syntax sugar" do
     queue.should have(5).acked_messages
   end
   
-  it "makes the callback (#subscribe) block available" do
+  it "makes the callback (#subscribe) block testable" do
     emphasis = mock_queue
     emphasis.subscribe { |msg| @emphasized = "**" + msg + "**" }
     emphasis.run_callback("show emphasis").should == "**show emphasis**"
