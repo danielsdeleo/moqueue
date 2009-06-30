@@ -1,5 +1,8 @@
 module Moqueue
   
+  class DoubleSubscribeError < StandardError
+  end
+  
   class MockQueue
     attr_reader :name
     
@@ -20,6 +23,9 @@ module Moqueue
     end
     
     def subscribe(opts={}, &block)
+      if @subscribe_block 
+        raise DoubleSubscribeError, "you can't subscribe to the same queue twice"
+      end
       @subscribe_block = block
       @ack_msgs = opts[:ack] || false
       process_unhandled_messages
@@ -58,17 +64,9 @@ module Moqueue
       end
     end
     
-    def bind(topic, key)
-      topic.attach_queue(self, key)
+    def bind(exchange, key=nil)
+      exchange.attach_queue(self, key)
       self
-    end
-    
-    private
-    
-    def receive_message_later(message, header_opts)
-      deferred_publishing_fibers << Fiber.new do
-        self.receive(message, header_opts)
-      end
     end
     
     def received_messages
@@ -77,6 +75,23 @@ module Moqueue
     
     def acked_messages
       @acked_messages ||= []
+    end
+    
+    def run_callback(*args)
+      callback = message_handler_callback
+      callback.call(*(callback.arity == 1 ? [args.first] : args))
+    end
+    
+    def callback_defined?
+      !!message_handler_callback
+    end
+    
+    private
+    
+    def receive_message_later(message, header_opts)
+      deferred_publishing_fibers << Fiber.new do
+        self.receive(message, header_opts)
+      end
     end
     
     def deferred_publishing_fibers

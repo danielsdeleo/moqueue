@@ -41,6 +41,34 @@ describe "AMQP", "when mocked out by Moqueue" do
   
 end
 
+describe Moqueue, "with syntax sugar" do
+  
+  before(:each) do
+    reset_broker
+  end
+  
+  it "counts received messages" do
+    queue = mock_queue
+    queue.subscribe { |msg| msg.should_not be_nil }
+    5.times {queue.publish("no moar beers kthxbye")}
+    queue.should have(5).received_messages
+  end
+  
+  it "counts acked messages" do
+    queue = mock_queue
+    queue.subscribe(:ack=>true) { |headers,msg| headers.ack }
+    5.times { queue.publish("time becomes a loop") }
+    queue.should have(5).acked_messages
+  end
+  
+  it "makes the callback (#subscribe) block available" do
+    emphasis = mock_queue
+    emphasis.subscribe { |msg| @emphasized = "**" + msg + "**" }
+    emphasis.run_callback("show emphasis").should == "**show emphasis**"
+  end
+  
+end
+
 describe Moqueue, "when using custom rspec matchers" do
   
   it "should accept syntax like queue.should have_received('a message')" do

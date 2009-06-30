@@ -1,7 +1,7 @@
 module Moqueue
   
   class MockExchange
-    attr_reader :topic
+    attr_reader :topic, :fanout
     
     class << self
       
@@ -9,6 +9,11 @@ module Moqueue
         if opts[:topic] && topic_exchange = MockBroker.instance.find_topic_exchange(opts[:topic])
           return topic_exchange
         end
+        
+        if opts[:fanout] && fanout = MockBroker.instance.find_fanout_exchange(opts[:fanout])
+          return fanout
+        end
+        
         super
       end
       
@@ -17,6 +22,8 @@ module Moqueue
     def initialize(opts={})
       if @topic = opts[:topic]
         MockBroker.instance.register_topic_exchange(self)
+      elsif @fanout = opts[:fanout]
+        MockBroker.instance.register_fanout_exchange(self)
       end
     end
     

@@ -89,7 +89,9 @@ describe MockQueue do
   end
   
   it "should raise an error on double subscribe" do
-    pending
+    @queue.subscribe { |msg| "once" }
+    second_subscribe = lambda { @queue.subscribe {|msg| "twice"} }
+    second_subscribe.should raise_error DoubleSubscribeError
   end
   
   it "should emulate direct exchange publishing" do
@@ -117,6 +119,17 @@ describe MockQueue do
     topic_exchange = MockExchange.new(:topic => "lolcats")
     topic_exchange.expects(:attach_queue).with(queue, :key=>"lolcats.fridges")
     queue.bind(topic_exchange, :key => "lolcats.fridges") #http://lolcatz.net/784/im-in-ur-fridge-eatin-ur-foodz/
+  end
+  
+  it "should make the callback (#subscribe block) available for direct use" do
+    queue = MockQueue.new("inspect my guts, plz")
+    queue.subscribe { |msg| msg + "yo" }
+    queue.run_callback("hey-").should == "hey-yo"
+  end
+  
+  it "should bind to a fanout exchange" do
+    queue = MockQueue.new("fanouts are cool, too")
+    lambda {queue.bind(MockExchange.new)}.should_not raise_error
   end
   
 end

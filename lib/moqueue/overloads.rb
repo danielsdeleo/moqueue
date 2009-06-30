@@ -6,6 +6,11 @@ class MQ
     def queue(name)
       Moqueue::MockQueue.new(name)
     end
+    
+    def fanout(name, opts={})
+      Moqueue::MockExchange.new(opts.merge(:fanout=>name))
+    end
+
   end
   
   def queue(name)
@@ -15,7 +20,7 @@ class MQ
   def topic(topic_name)
     Moqueue::MockExchange.new(:topic=>topic_name)
   end
-    
+  
 end
 
 module AMQP

@@ -12,8 +12,8 @@ describe ObjectMethods do
     reset_broker
   end
   
-  it "should name the queue ``anonymous'' if not given a name" do
-    @queue.name.should == "anonymous"
+  it "should name the queue ``anonymous-RANDOM_GARBAGE'' if not given a name" do
+    @queue.name.should match /anonymous\-[0-9a-f]{0,8}/
   end
   
   it "should name the queue with the name given" do

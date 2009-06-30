@@ -9,7 +9,7 @@ module Moqueue
     end
 
     def mock_queue(name=nil)
-      MockQueue.new(name || "anonymous")
+      MockQueue.new(name || "anonymous-#{rand(2**32).to_s(16)}")
     end
     
     def mock_exchange(opts={})

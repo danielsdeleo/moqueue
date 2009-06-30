@@ -13,6 +13,7 @@ module Moqueue
     def reset!
       @registered_queues = {}
       @registered_topic_exchanges = {}
+      @registered_fanout_exchanges = {}
     end
     
     def find_queue(name)
@@ -29,6 +30,14 @@ module Moqueue
     
     def find_topic_exchange(topic)
       @registered_topic_exchanges[topic]
+    end
+    
+    def register_fanout_exchange(exchange)
+      @registered_fanout_exchanges[exchange.fanout] = exchange
+    end
+    
+    def find_fanout_exchange(fanout_name)
+      @registered_fanout_exchanges[fanout_name]
     end
     
   end

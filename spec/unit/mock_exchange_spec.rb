@@ -83,4 +83,20 @@ describe MockExchange do
     lambda {exchange.publish("failtacular")}.should raise_error(ArgumentError, fail_msg)
   end
   
+  it "should allow the fanout exchange name to be queried" do
+    exchange = MockExchange.new(:fanout => "hiMyNameIs")
+    exchange.fanout.should == "hiMyNameIs"
+  end
+  
+  it "should register new fanout exchanges with the MockBroker" do
+    MockBroker.instance.expects(:register_fanout_exchange)
+    MockExchange.new(:fanout => "nanite friendly")
+  end
+  
+  it "should return the exact same fanout exchange if creating one with an identical name" do
+    the_first_fanout = MockExchange.new(:fanout => "pseudo singleton")
+    the_second_one = MockExchange.new(:fanout => "pseudo singleton")
+    the_first_fanout.should equal the_second_one
+  end
+  
 end

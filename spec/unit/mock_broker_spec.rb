@@ -22,7 +22,13 @@ describe MockBroker do
   it "should keep a list of topic exchanges" do
     exchange = MockExchange.new(:topic => "lolcats")
     @broker.register_topic_exchange(exchange)
-    @broker.find_topic_exchange("lolcats").should equal exchange
+    @broker.find_topic_exchange("lolcats").should equal(exchange)
+  end
+  
+  it "should keep a list of fanout queues" do
+    exchange = MockExchange.new(:fanout => "joinTheNaniteBorg")
+    @broker.register_fanout_exchange(exchange)
+    @broker.find_fanout_exchange("joinTheNaniteBorg").should equal(exchange)
   end
   
 end
