@@ -132,4 +132,10 @@ describe MockQueue do
     lambda {queue.bind(MockExchange.new)}.should_not raise_error
   end
   
+  it "should provide a null subscribe that does nothing but allows messages to be received" do
+    queue = MockQueue.new("nilly").null_subscribe
+    queue.publish("I'm feelin this")
+    queue.received_message?("I'm feelin this").should be_true
+  end
+  
 end

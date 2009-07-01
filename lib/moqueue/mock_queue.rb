@@ -86,6 +86,14 @@ module Moqueue
       !!message_handler_callback
     end
     
+    # configures a do-nothing subscribe block to force
+    # received messages to be processed and stored in
+    # #received_messages
+    def null_subscribe
+      subscribe {|msg| nil}
+      self
+    end
+    
     private
     
     def receive_message_later(message, header_opts)
