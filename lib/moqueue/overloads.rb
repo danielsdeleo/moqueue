@@ -15,8 +15,12 @@ class MQ
   
   def initialize(*args)
   end
+
+  def fanout(name, opts = {})
+    Moqueue::MockExchange.new(opts.merge(:fanout => name))
+  end
   
-  def queue(name)
+  def queue(name, opts = {})
     Moqueue::MockQueue.new(name)
   end
   
@@ -43,4 +47,6 @@ module AMQP
     @closing = false
   end
   
+  def self.connect(*args)
+  end
 end

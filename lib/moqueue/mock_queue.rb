@@ -54,7 +54,7 @@ module Moqueue
       acked_messages.include?(message_content)
     end
     
-    def publish(message)
+    def publish(message, opts = {})
       if message_handler_callback
         real_publish(message)
       else
