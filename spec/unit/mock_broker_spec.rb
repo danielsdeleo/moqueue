@@ -16,7 +16,7 @@ describe MockBroker do
   it "should reset itself" do
     @broker.register_queue(MockQueue.new("throwaway"))
     @broker.reset!
-    @broker.registered_queues.count.should == 0
+    @broker.registered_queues.size.should == 0
   end
   
   it "should keep a list of topic exchanges" do
