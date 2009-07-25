@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{moqueue}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel DeLeo"]
-  s.date = %q{2009-07-09}
+  s.date = %q{2009-07-24}
   s.description = %q{Mocktacular Companion to AMQP Library. Happy TATFTing!}
   s.email = %q{dan@kallistec.com}
   s.extra_rdoc_files = ["README.rdoc"]
