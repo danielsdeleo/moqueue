@@ -35,8 +35,7 @@ module Moqueue
       if callback = message_handler_callback
         headers = MockHeaders.new(header_opts)
         callback.call(*(callback.arity == 1 ? [message] : [headers, message]))
-        received_messages << message
-        @ack_msgs && headers.received_ack? ? message : nil
+        received_messages_and_headers << {:message => message, :headers => headers}
       else
         receive_message_later(message, header_opts)
       end
@@ -56,10 +55,10 @@ module Moqueue
     
     def publish(message, opts = {})
       if message_handler_callback
-        real_publish(message)
+        receive(message)
       else
         deferred_publishing_fibers << Fiber.new do
-          real_publish(message)
+          receive(message)
         end
       end
     end
@@ -68,13 +67,19 @@ module Moqueue
       exchange.attach_queue(self, key)
       self
     end
+
+    def received_messages_and_headers
+      @received_messages_and_headers ||= []
+    end
     
     def received_messages
-      @received_messages ||= []
+      received_messages_and_headers.map{|r| r[:message] }
     end
     
     def acked_messages
-      @acked_messages ||= []
+      received_messages_and_headers.map do |r|
+        r[:message] if @ack_msgs && r[:headers].received_ack?
+      end
     end
     
     def run_callback(*args)
@@ -114,11 +119,6 @@ module Moqueue
       while fiber = deferred_publishing_fibers.shift
         fiber.resume
       end
-    end
-    
-    def real_publish(message)
-      response = receive(message)
-      acked_messages << response if response
     end
     
   end

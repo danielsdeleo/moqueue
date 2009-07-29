@@ -32,7 +32,10 @@ module Moqueue
     end
     
     def acked_messages
-      @acked_messages ||= []
+      attached_queues.map do |q|
+        q = q.first if q.kind_of?(Array)
+        q.acked_messages
+      end.flatten
     end
     
     def attach_queue(queue, opts={})
@@ -46,7 +49,7 @@ module Moqueue
     def publish(message, opts={})
       require_routing_key(opts) if topic
       matching_queues(opts).each do |q| 
-        ack_message(q.receive(message, prepare_header_opts(opts)))
+        q.receive(message, prepare_header_opts(opts))
       end
     end
     
@@ -55,10 +58,6 @@ module Moqueue
     end
         
     private
-    
-    def ack_message(message)
-      acked_messages << message if message
-    end
     
     def routing_keys_match?(binding_key, message_key)
       BindingKey.new(binding_key).matches?(message_key)
