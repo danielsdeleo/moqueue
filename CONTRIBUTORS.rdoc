@@ -1,0 +1,3 @@
+= Contributors
+* larrytheliquid (Larry Diehl) & Engine Yard http://github.com/larrytheliquid
+* mattmatt (Mathias Meyer) & Peritor Consulting http://github.com/mattmatt
