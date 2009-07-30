@@ -44,10 +44,8 @@ What's not working:
 
 There are some things that Moqueue may never be able to do. As one prominent example, for queues that are configured to expect acknowledgements (the <tt>:ack=>true</tt> option), the behavior on shutdown is not emulated correctly.
 
-== TODOs
-* Mocha-style expectation syntax, i.e. <tt>queue.expects_message("yessss").with_routing_key("awesome.yesItIs")</tt>
-* Support for RPC exchanges
-* Make it pretty on the inside.
+== Hacking
+Moqueue is at a stage where it "works for me." That said, there may be methods or method signatures that aren't correct/ aren't supported. If this happens to you, fork me and send a pull request when you're done. Patches and feedback welcome.
 
 == Moar
 I wrote an introductory post on my blog, it's probably the best source of high-level discussion right now. Visit: http://kallistec.com/2009/06/21/introducing-moqueue/
