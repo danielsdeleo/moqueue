@@ -87,6 +87,10 @@ describe MockQueue do
     pending ("should really remove the association with exchange")
     @queue.should respond_to(:unsubscribe)
   end
+
+  it "should ignore #prefetch but at least raise an error" do
+    lambda { @queue.prefetch(1337) }.should_not raise_error
+  end
   
   it "should raise an error on double subscribe" do
     @queue.subscribe { |msg| "once" }

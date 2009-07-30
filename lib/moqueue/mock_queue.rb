@@ -48,6 +48,10 @@ module Moqueue
     def unsubscribe
       true
     end
+
+    def prefetch(size)
+      # noop
+    end    
     
     def received_ack_for_message?(message_content)
       acked_messages.include?(message_content)
