@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Moqueue, "when running the logger example" do
   
-  class Logger
+  class MyLoggerRulez
     def initialize *args, &block
       opts = args.pop if args.last.is_a? Hash
       opts ||= {}
@@ -51,7 +51,7 @@ describe Moqueue, "when running the logger example" do
                   :msg => data)
 
       print(opts)
-      unless Logger.disabled?
+      unless MyLoggerRulez.disabled?
         MQ.fanout('logging', :durable => true).publish Marshal.dump(opts)
       end
 
@@ -98,10 +98,10 @@ describe Moqueue, "when running the logger example" do
   
   def run_client
     AMQP.start do
-      log = Logger.new
+      log = MyLoggerRulez.new
       log.debug 'its working!'
     
-      log = Logger.new do |msg|
+      log = MyLoggerRulez.new do |msg|
         #require 'pp'
         #pp msg
         #puts
@@ -116,7 +116,7 @@ describe Moqueue, "when running the logger example" do
       log.info '123', :process
       log.debug 'login', :session => 'abc', :user => 123
 
-      log = Logger.new(:webserver, :timestamp, :hostname, &log.printer)
+      log = MyLoggerRulez.new(:webserver, :timestamp, :hostname, &log.printer)
       log.info 'Request for /', :GET, :session => 'abc'
 
       #AMQP.stop{ EM.stop }
