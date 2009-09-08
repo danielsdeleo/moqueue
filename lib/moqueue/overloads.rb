@@ -7,6 +7,10 @@ class MQ
       Moqueue::MockQueue.new(name)
     end
     
+    def direct(name, opts={})
+      Moqueue::MockExchange.new(opts.merge(:direct=>name))
+    end
+    
     def fanout(name, opts={})
       Moqueue::MockExchange.new(opts.merge(:fanout=>name))
     end
@@ -14,6 +18,10 @@ class MQ
   end
   
   def initialize(*args)
+  end
+
+  def direct(name, opts = {})
+    Moqueue::MockExchange.new(opts.merge(:direct => name))
   end
 
   def fanout(name, opts = {})

@@ -31,8 +31,16 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
     end
   end
   
+  it "should create direct exchanges" do
+    MQ.new.direct("directamundo").should == MockExchange.new(:direct => "directamundo")
+  end
+  
   it "should create topic exchanges" do
     MQ.new.topic("lolzFTW").should == MockExchange.new(:topic => "lolzFTW")
+  end
+  
+  it "should provide a MQ.direct class method" do
+    MQ.direct("direct", :durable=>true).should be_a(Moqueue::MockExchange)
   end
   
   it "should provide a MQ.fanout class method" do
