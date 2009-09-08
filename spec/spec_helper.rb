@@ -18,4 +18,9 @@ def deferred_block_called
   true
 end
 
+def ensure_deferred_block_skipped
+  @skip_me = mock("poke_me")
+  @skip_me.expects(:deferred_block_called).times(0)
+end
+
 include Moqueue

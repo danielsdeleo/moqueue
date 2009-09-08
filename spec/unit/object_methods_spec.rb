@@ -13,7 +13,7 @@ describe ObjectMethods do
   end
   
   it "should name the queue ``anonymous-RANDOM_GARBAGE'' if not given a name" do
-    @queue.name.should match /anonymous\-[0-9a-f]{0,8}/
+    @queue.name.should match(/anonymous\-[0-9a-f]{0,8}/)
   end
   
   it "should name the queue with the name given" do

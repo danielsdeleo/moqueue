@@ -1,7 +1,7 @@
 module Moqueue
   
   class MockExchange
-    attr_reader :topic, :fanout
+    attr_reader :topic, :fanout, :direct
     
     class << self
       
@@ -14,6 +14,10 @@ module Moqueue
           return fanout
         end
         
+        if opts[:direct] && direct = MockBroker.instance.find_direct_exchange(opts[:direct])
+          return direct
+        end
+        
         super
       end
       
@@ -24,6 +28,8 @@ module Moqueue
         MockBroker.instance.register_topic_exchange(self)
       elsif @fanout = opts[:fanout]
         MockBroker.instance.register_fanout_exchange(self)
+      elsif @direct = opts[:direct]
+        MockBroker.instance.register_direct_exchange(self)
       end
     end
     
@@ -40,7 +46,9 @@ module Moqueue
     
     def attach_queue(queue, opts={})
       if topic
-        attached_queues << [queue, BindingKey.new(opts[:key])]
+        attached_queues << [queue, TopicBindingKey.new(opts[:key])]
+      elsif direct
+        attached_queues << [queue, DirectBindingKey.new(opts[:key])]
       else
         attached_queues << queue
       end
@@ -60,11 +68,15 @@ module Moqueue
     private
     
     def routing_keys_match?(binding_key, message_key)
-      BindingKey.new(binding_key).matches?(message_key)
+      if topic
+        TopicBindingKey.new(binding_key).matches?(message_key)
+      elsif direct
+        DirectBindingKey.new(binding_key).matches?(message_key)
+      end      
     end
     
     def matching_queues(opts={})
-      return attached_queues unless topic
+      return attached_queues unless topic || direct
       attached_queues.map {|q, binding| binding.matches?(opts[:key]) ? q : nil}.compact
     end
     
@@ -84,15 +96,19 @@ module Moqueue
     
     public
     
-    class BindingKey
+    module BaseKey
       attr_reader :key
-
-      def initialize(key_string)
-        @key = key_string.to_s.split(".")
-      end
 
       def ==(other)
         other.respond_to?(:key) && other.key == @key
+      end
+    end
+
+    class TopicBindingKey
+      include BaseKey
+
+      def initialize(key_string)
+        @key = key_string.to_s.split(".")
       end
 
       def matches?(message_key)
@@ -108,6 +124,24 @@ module Moqueue
       end
 
     end
+    
+    # Requires an *exact* match
+    class DirectBindingKey
+      include BaseKey
+
+      def initialize(key_string)
+        @key = key_string.to_s
+      end
+
+      def matches?(message_key)
+        message_key, binding_key = message_key.to_s, key.dup
+
+        # looking for string equivalence
+        message_key == binding_key
+      end
+
+    end
+    
   end
   
 end

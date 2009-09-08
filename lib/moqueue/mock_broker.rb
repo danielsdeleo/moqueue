@@ -12,6 +12,7 @@ module Moqueue
     
     def reset!
       @registered_queues = {}
+      @registered_direct_exchanges = {}
       @registered_topic_exchanges = {}
       @registered_fanout_exchanges = {}
     end
@@ -22,6 +23,14 @@ module Moqueue
     
     def register_queue(queue)
       @registered_queues[queue.name] = queue
+    end
+    
+    def register_direct_exchange(exchange)
+      @registered_direct_exchanges[exchange.direct] = exchange
+    end
+    
+    def find_direct_exchange(name)
+      @registered_direct_exchanges[name]
     end
     
     def register_topic_exchange(exchange)

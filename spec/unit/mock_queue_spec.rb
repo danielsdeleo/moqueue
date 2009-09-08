@@ -84,7 +84,7 @@ describe MockQueue do
   end
   
   it "should #unsubscribe" do
-    pending ("should really remove the association with exchange")
+    pending("should really remove the association with exchange")
     @queue.should respond_to(:unsubscribe)
   end
 
@@ -95,7 +95,7 @@ describe MockQueue do
   it "should raise an error on double subscribe" do
     @queue.subscribe { |msg| "once" }
     second_subscribe = lambda { @queue.subscribe {|msg| "twice"} }
-    second_subscribe.should raise_error DoubleSubscribeError
+    second_subscribe.should raise_error(DoubleSubscribeError)
   end
   
   it "should emulate direct exchange publishing" do

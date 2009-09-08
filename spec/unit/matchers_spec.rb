@@ -44,8 +44,8 @@ describe Matchers do
       Object.new.should have_received_message("foo")
     rescue => e
     end
-    e.should be_a NoMethodError
-    e.message.should match /you can't use \`\`should have_received_message\'\' on #\<Object/
+    e.should be_a(NoMethodError)
+    e.message.should match(/you can't use \`\`should have_received_message\'\' on #\<Object/)
   end
   
   it "should alias #have_received_message as #have_received for less verbosity" do
@@ -85,8 +85,8 @@ describe Matchers do
       Object.new.should have_received_message("foo")
     rescue => e
     end
-    e.should be_a NoMethodError
-    e.message.should match /you can't use \`\`should have_received_message\'\' on #\<Object/
+    e.should be_a(NoMethodError)
+    e.message.should match(/you can't use \`\`should have_received_message\'\' on #\<Object/)
   end
   
 end

@@ -36,12 +36,12 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
   end
   
   it "should provide a MQ.fanout class method" do
-    MQ.fanout("fanout", :durable=>true).should be_a Moqueue::MockExchange
+    MQ.fanout("fanout", :durable=>true).should be_a(Moqueue::MockExchange)
   end
   
   it "should create a named fanout queue via MQ.fanout" do
     fanout = MQ.fanout("SayMyNameSayMyName", :durable=>true)
-    fanout.should be_a Moqueue::MockExchange
+    fanout.should be_a(Moqueue::MockExchange)
     fanout.fanout.should == "SayMyNameSayMyName"
   end
   

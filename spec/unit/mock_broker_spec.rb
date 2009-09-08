@@ -19,6 +19,12 @@ describe MockBroker do
     @broker.registered_queues.size.should == 0
   end
   
+  it "should keep a list of direct exchanges" do
+    exchange = MockExchange.new(:direct => "thundercats")
+    @broker.register_direct_exchange(exchange)
+    @broker.find_direct_exchange("thundercats").should equal(exchange)
+  end
+  
   it "should keep a list of topic exchanges" do
     exchange = MockExchange.new(:topic => "lolcats")
     @broker.register_topic_exchange(exchange)
