@@ -25,6 +25,16 @@ describe Matchers do
     @mock_moqueue.should_not have_received_message("no match")
   end
   
+  it "should implement Object#should have_exact_routing_key(key)" do
+    @mock_moqueue.expects(:received_routing_key?).with("routing.key").returns(true)
+    @mock_moqueue.should have_received_exact_routing_key("routing.key")
+  end
+  
+  it "should implement Object#should_not have_exact_routing_key(key)" do
+    @mock_moqueue.expects(:received_routing_key?).with("routing.key").returns(false)
+    @mock_moqueue.should_not have_received_exact_routing_key("routing.key")
+  end
+  
   it "should have a useful failure message" do
     @mock_moqueue.expects(:received_message?).with("this fails").returns(false)
     failing_example = lambda {@mock_moqueue.should have_received_message("this fails")}

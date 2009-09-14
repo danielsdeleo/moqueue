@@ -45,6 +45,10 @@ module Moqueue
       received_messages.include?(message_content)
     end
     
+    def received_routing_key?(key)
+      received_messages_and_headers.find { |r| r[:headers] && r[:headers].properties[:routing_key] == key }
+    end
+    
     def unsubscribe
       true
     end
@@ -78,6 +82,10 @@ module Moqueue
     
     def received_messages
       received_messages_and_headers.map{|r| r[:message] }
+    end
+    
+    def received_headers
+      received_messages_and_headers.map{ |r| r[:headers] }
     end
     
     def acked_messages

@@ -21,6 +21,12 @@ describe MockQueue do
     @exchange.publish("the message")
   end
   
+  it "should allow retrieval of the headers for any published messages" do
+    @queue.subscribe { |msg| msg }
+    @exchange.publish("the message")
+    @queue.received_headers.first.should be_kind_of(Moqueue::MockHeaders)
+  end
+  
   it "should create mock headers if pop is given a block w/ 2 arity" do
     pending
   end
