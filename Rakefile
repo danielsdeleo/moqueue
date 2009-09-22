@@ -1,4 +1,5 @@
 require "spec/rake/spectask"
+require "rake/rdoctask"
 
 task :default => :spec
 
@@ -27,7 +28,11 @@ end
 
 # These are new tasks
 begin
+  require 'jeweler/rubyforge_tasks'
   require 'rake/contrib/sshpublisher'
+  
+  Jeweler::RubyforgeTasks.new
+  
   namespace :rubyforge do
 
     desc "Release gem and RDoc documentation to RubyForge"
@@ -41,7 +46,7 @@ begin
         )
 
         host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/the-perfect-gem/"
+        remote_dir = "/var/www/gforge-projects/moqueue/"
         local_dir = 'rdoc'
 
         Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
@@ -50,4 +55,10 @@ begin
   end
 rescue LoadError
   puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
+end
+
+Rake::RDocTask.new do |rd|
+  rd.main = "README.rdoc"
+  rd.rdoc_files.include("README.rdoc", "lib/**/*.rb")
+  rd.rdoc_dir = "rdoc"
 end
