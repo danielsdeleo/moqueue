@@ -39,11 +39,11 @@ describe ObjectMethods do
   end
   
   it "should provide a convenience method for creating mock queues" do
-    mock_queue("Sugary").should be_kind_of(Moqueue::MockQueue)
+    mock_queue("Sugary").should be_kind_of(Faqueue::MockQueue)
   end
   
   it "should provide a convenience method for creating mock exchanges" do
-    mock_exchange(:topic => "sweetSugar").should be_kind_of(Moqueue::MockExchange)
+    mock_exchange(:topic => "sweetSugar").should be_kind_of(Faqueue::MockExchange)
   end
   
 end

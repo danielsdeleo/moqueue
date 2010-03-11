@@ -1,4 +1,4 @@
-module Moqueue
+module Faqueue
   
   class DoubleSubscribeError < StandardError
   end

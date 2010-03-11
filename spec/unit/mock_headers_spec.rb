@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe MockHeaders do
   
   it "should respond to the same methods as real AMQP::Protocol::Header" do
-    headers = Moqueue::MockHeaders.new
+    headers = Faqueue::MockHeaders.new
     headers.should respond_to(:size)
     headers.should respond_to(:weight)
     headers.should respond_to(:properties)

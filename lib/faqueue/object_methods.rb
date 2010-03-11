@@ -1,4 +1,4 @@
-module Moqueue
+module Faqueue
   
   module ObjectMethods
     def mock_queue_and_exchange(name=nil)
@@ -25,7 +25,7 @@ module Moqueue
     # Overloads the class-level method calls typically used by AMQP code
     # such as MQ.direct, MQ.queue, MQ.topic, etc.
     def overload_amqp
-      require MOQUEUE_ROOT + "moqueue/overloads"
+      require FAQUEUE_ROOT + "faqueue/overloads"
     end
     
     # Deletes all exchanges and queues from the mock broker. As a consequence of
@@ -38,4 +38,4 @@ module Moqueue
   
 end
 
-Object.send(:include, Moqueue::ObjectMethods)
+Object.send(:include, Faqueue::ObjectMethods)

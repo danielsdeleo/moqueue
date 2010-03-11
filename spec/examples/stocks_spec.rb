@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/example_helper'
 
-describe Moqueue, "when running the stocks example" do
+describe Faqueue, "when running the stocks example" do
   include ExampleHelper
   
   def run_stocks

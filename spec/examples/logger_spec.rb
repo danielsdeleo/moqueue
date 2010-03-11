@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Moqueue, "when running the logger example" do
+describe Faqueue, "when running the logger example" do
   
   class MyLoggerRulez
     def initialize *args, &block

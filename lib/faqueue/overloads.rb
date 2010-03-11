@@ -4,15 +4,15 @@ class MQ
   
   class << self
     def queue(name)
-      Moqueue::MockQueue.new(name)
+      Faqueue::MockQueue.new(name)
     end
     
     def direct(name, opts={})
-      Moqueue::MockExchange.new(opts.merge(:direct=>name))
+      Faqueue::MockExchange.new(opts.merge(:direct=>name))
     end
     
     def fanout(name, opts={})
-      Moqueue::MockExchange.new(opts.merge(:fanout=>name))
+      Faqueue::MockExchange.new(opts.merge(:fanout=>name))
     end
 
   end
@@ -21,19 +21,19 @@ class MQ
   end
 
   def direct(name, opts = {})
-    Moqueue::MockExchange.new(opts.merge(:direct => name))
+    Faqueue::MockExchange.new(opts.merge(:direct => name))
   end
 
   def fanout(name, opts = {})
-    Moqueue::MockExchange.new(opts.merge(:fanout => name))
+    Faqueue::MockExchange.new(opts.merge(:fanout => name))
   end
   
   def queue(name, opts = {})
-    Moqueue::MockQueue.new(name)
+    Faqueue::MockQueue.new(name)
   end
   
   def topic(topic_name)
-    Moqueue::MockExchange.new(:topic=>topic_name)
+    Faqueue::MockExchange.new(:topic=>topic_name)
   end
   
 end

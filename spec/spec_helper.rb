@@ -5,7 +5,7 @@ Spec::Runner.configure do |config|
   config.mock_with :mocha
 end
 
-require File.dirname(__FILE__) + "/../lib/moqueue"
+require File.dirname(__FILE__) + "/../lib/faqueue"
 
 # Make sure tests fail if deferred blocks (for susbscribe and pop) don't get called
 def ensure_deferred_block_called(opts={:times=>1})
@@ -23,4 +23,4 @@ def ensure_deferred_block_skipped
   @skip_me.expects(:deferred_block_called).times(0)
 end
 
-include Moqueue
+include Faqueue

@@ -1,4 +1,4 @@
-module Moqueue
+module Faqueue
   
   class MockHeaders
     attr_accessor :size, :weight

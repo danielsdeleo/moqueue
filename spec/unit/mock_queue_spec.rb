@@ -14,7 +14,7 @@ describe MockQueue do
   it "should pass mock headers to block when subscribe is given a block w/ 2 arity" do
     ensure_deferred_block_called
     @queue.subscribe do |headers, msg|
-      headers.should be_kind_of(Moqueue::MockHeaders)
+      headers.should be_kind_of(Faqueue::MockHeaders)
       msg.should == "the message"
       deferred_block_called
     end
@@ -24,7 +24,7 @@ describe MockQueue do
   it "should allow retrieval of the headers for any published messages" do
     @queue.subscribe { |msg| msg }
     @exchange.publish("the message")
-    @queue.received_headers.first.should be_kind_of(Moqueue::MockHeaders)
+    @queue.received_headers.first.should be_kind_of(Faqueue::MockHeaders)
   end
   
   it "should create mock headers if pop is given a block w/ 2 arity" do

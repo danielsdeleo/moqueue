@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
+describe "AMQP and MQ", "when overloaded by faqueue/overloads" do
   
   before(:all) do
     overload_amqp
@@ -20,7 +20,7 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
   end
   
   it "should provide a MQ.queue class method" do
-    MQ.queue('FTW').should be_a(Moqueue::MockQueue)
+    MQ.queue('FTW').should be_a(Faqueue::MockQueue)
   end
   
   it "should emulate the behavior of MQ.closing?" do
@@ -40,16 +40,16 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
   end
   
   it "should provide a MQ.direct class method" do
-    MQ.direct("direct", :durable=>true).should be_a(Moqueue::MockExchange)
+    MQ.direct("direct", :durable=>true).should be_a(Faqueue::MockExchange)
   end
   
   it "should provide a MQ.fanout class method" do
-    MQ.fanout("fanout", :durable=>true).should be_a(Moqueue::MockExchange)
+    MQ.fanout("fanout", :durable=>true).should be_a(Faqueue::MockExchange)
   end
   
   it "should create a named fanout queue via MQ.fanout" do
     fanout = MQ.fanout("SayMyNameSayMyName", :durable=>true)
-    fanout.should be_a(Moqueue::MockExchange)
+    fanout.should be_a(Faqueue::MockExchange)
     fanout.fanout.should == "SayMyNameSayMyName"
   end
   

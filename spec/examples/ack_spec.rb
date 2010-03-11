@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/example_helper'
 
-# NOTE: moqueue currently does not mimic AMQP's behavior of:
+# NOTE: faqueue currently does not mimic AMQP's behavior of:
 # 1) requiring graceful shutdown for acks to be delivered
 # 2) returning messages to the queue if not acked
 # 3) not processing messages when AMQP isn't "running"
@@ -10,7 +10,7 @@ require File.dirname(__FILE__) + '/example_helper'
 # with a real broker. The true behavior should be that the 3rd message 
 # published should be unacknowledged and returned to the queue. In this test,
 # all messages get acknowleged
-describe Moqueue, "when running the ack example" do
+describe Faqueue, "when running the ack example" do
   include ExampleHelper
   
   def run_ack_example(&perform_ack)

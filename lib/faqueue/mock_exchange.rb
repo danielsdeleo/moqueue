@@ -1,4 +1,4 @@
-module Moqueue
+module Faqueue
   
   class MockExchange
     attr_reader :topic, :fanout, :direct

@@ -1,4 +1,4 @@
-module Moqueue
+module Faqueue
   module Matchers
     
     class HasReceived
@@ -108,6 +108,6 @@ end
 
 if defined?(::Spec::Runner)
   Spec::Runner.configure do |config|
-    config.include(::Moqueue::Matchers)
+    config.include(::Faqueue::Matchers)
   end
 end

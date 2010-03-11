@@ -1,6 +1,6 @@
 require "singleton"
 
-module Moqueue
+module Faqueue
   class MockBroker
     include Singleton
     

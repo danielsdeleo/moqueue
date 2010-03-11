@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "AMQP", "when mocked out by Moqueue" do
+describe "AMQP", "when mocked out by Faqueue" do
   
   before(:each) do
     reset_broker
@@ -54,7 +54,7 @@ describe "AMQP", "when mocked out by Moqueue" do
   
 end
 
-describe Moqueue, "with syntax sugar" do
+describe Faqueue, "with syntax sugar" do
   
   before(:each) do
     reset_broker
@@ -82,7 +82,7 @@ describe Moqueue, "with syntax sugar" do
   
 end
 
-describe Moqueue, "when using custom rspec matchers" do
+describe Faqueue, "when using custom rspec matchers" do
   
   it "should accept syntax like queue.should have_received('a message')" do
     queue = mock_queue("sugary")
