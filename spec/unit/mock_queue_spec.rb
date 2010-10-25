@@ -142,6 +142,17 @@ describe MockQueue do
     lambda {queue.bind(MockExchange.new)}.should_not raise_error
   end
   
+  
+  it "should bind to a fanout exchange only once" do
+    queue = MockQueue.new("fanouts are cool, too")
+    exchange = MockExchange.new('fanout')
+    queue.bind exchange
+    queue.bind exchange # should be silently ignored
+    exchange.publish "only get this once", {}
+    require 'pp'
+    pp exchange
+  end
+  
   it "should provide a null subscribe that does nothing but allows messages to be received" do
     queue = MockQueue.new("nilly").null_subscribe
     queue.publish("I'm feelin this")

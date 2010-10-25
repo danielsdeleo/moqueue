@@ -50,7 +50,7 @@ module Moqueue
       elsif direct
         attached_queues << [queue, DirectBindingKey.new(opts[:key])]
       else
-        attached_queues << queue
+        attached_queues << queue unless attached_queues.include?(queue)
       end
     end
     
