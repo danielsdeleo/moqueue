@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe MockQueue do
 
@@ -144,7 +144,7 @@ describe MockQueue do
 
   it "should bind to a fanout exchange only once" do
     queue = MockQueue.new("fanouts are cool, too")
-    exchange = MockExchange.new('fanout')
+    exchange = MockExchange.new(:fanout => 'fanouts')
     queue.bind exchange
     queue.bind exchange # should be silently ignored
     exchange.publish "only get this once", {}

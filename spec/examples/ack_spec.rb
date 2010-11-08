@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/example_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/example_helper')
 
 # NOTE: moqueue currently does not mimic AMQP's behavior of:
 # 1) requiring graceful shutdown for acks to be delivered
