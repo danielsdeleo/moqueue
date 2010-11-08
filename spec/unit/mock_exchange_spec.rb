@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe MockExchange do
   
@@ -13,6 +13,8 @@ describe MockExchange do
     one_queue, another_queue = mock_queue("one"), mock_queue("two")
     exchange.attach_queue(one_queue)
     exchange.attach_queue(another_queue)
+    exchange.attached_queues.length.should == 2
+    lambda { exchange.attach_queue(one_queue) }.should_not change(exchange.attached_queues, :length)
     one_queue.subscribe do |msg|
       deferred_block_called && msg.should == "mmm, smoothies"
     end
