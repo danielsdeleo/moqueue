@@ -32,7 +32,7 @@ class MQ
     Moqueue::MockQueue.new(name)
   end
 
-  def topic(topic_name)
+  def topic(topic_name, opts = {})
     Moqueue::MockExchange.new(:topic=>topic_name)
   end
 
