@@ -7,12 +7,12 @@ require File.expand_path(File.dirname(__FILE__) + '/example_helper')
 # 3) not processing messages when AMQP isn't "running"
 #
 # This causes the result of this test to differ from the actual result when run
-# with a real broker. The true behavior should be that the 3rd message 
+# with a real broker. The true behavior should be that the 3rd message
 # published should be unacknowledged and returned to the queue. In this test,
 # all messages get acknowleged
 describe Moqueue, "when running the ack example" do
   include ExampleHelper
-  
+
   def run_ack_example(&perform_ack)
     AMQP.start(:host => 'localhost') do
       MQ.queue('awesome').publish('Totally rad 1')
@@ -36,18 +36,18 @@ describe Moqueue, "when running the ack example" do
         end
       end
     end
-    
+
   end
-  
+
   before(:all) do
     overload_amqp
   end
-  
+
   before(:each) do
     reset_broker
     reset!
   end
-  
+
   it "should get the correct result without errors" do
     Timeout::timeout(2) do
       run_ack_example {|h| h.ack }

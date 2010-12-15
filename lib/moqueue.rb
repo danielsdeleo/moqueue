@@ -11,5 +11,5 @@ require MOQUEUE_ROOT + "moqueue/mock_broker"
 require MOQUEUE_ROOT + "moqueue/object_methods"
 require MOQUEUE_ROOT + "moqueue/matchers"
 
-module Moqueue  
+module Moqueue
 end

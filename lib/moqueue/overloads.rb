@@ -35,7 +35,6 @@ class MQ
   def topic(topic_name, opts = {})
     Moqueue::MockExchange.new(:topic=>topic_name)
   end
-
 end
 
 module AMQP

@@ -16,11 +16,11 @@ unless defined? Fiber
       @thread[:fiber] = self
     end
     attr_reader :thread
-    
+
     def alive?
       @thread.alive?
     end
-    
+
     def resume *args
       raise FiberError, 'dead fiber called' unless @thread.alive?
       raise FiberError, 'double resume' if @thread == Thread.current
@@ -28,17 +28,17 @@ unless defined? Fiber
       result = @yield.pop
       result.size > 1 ? result : result.first
     end
-    
+
     def resume!
       @resume.push []
     end
-    
+
     def yield *args
       @yield.push(args)
       result = @resume.pop
       result.size > 1 ? result : result.first
     end
-    
+
     def self.yield *args
       raise FiberError, "can't yield from root fiber" unless fiber = Thread.current[:fiber]
       fiber.yield(*args)

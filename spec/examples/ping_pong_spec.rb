@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/example_helper')
 
 describe Moqueue, "when testing the ping pong example" do
   include ExampleHelper
-  
+
   def ping_pong
     AMQP.start(:host => 'localhost') do
 
@@ -28,22 +28,22 @@ describe Moqueue, "when testing the ping pong example" do
       }
 
     end
-    
+
   end
-  
+
   before(:all) do
     overload_amqp
   end
-  
+
   before(:each) do
     reset!
   end
-  
+
   it "should get the correct result without error" do
     Timeout::timeout(5) do
       ping_pong
     end
-    expected = [[1, :sending, "ping"], [1, "one", :received, "ping", :sending, "pong"], [1, "two", :received, "pong"], 
+    expected = [[1, :sending, "ping"], [1, "one", :received, "ping", :sending, "pong"], [1, "two", :received, "pong"],
                 [2, :sending, "ping"], [2, "one", :received, "ping", :sending, "pong"], [2, "two", :received, "pong"]]
     @captured_output.should ==  expected
   end
