@@ -57,4 +57,7 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
     fanout.fanout.should == "SayMyNameSayMyName"
   end
 
+  it "should ignore #prefetch but at least raise an error" do
+    lambda { MQ.new.prefetch(1337) }.should_not raise_error
+  end
 end

@@ -14,7 +14,6 @@ class MQ
     def fanout(name, opts={})
       Moqueue::MockExchange.new(opts.merge(:fanout=>name))
     end
-
   end
 
   def initialize(*args)
@@ -34,6 +33,10 @@ class MQ
 
   def topic(topic_name, opts = {})
     Moqueue::MockExchange.new(:topic=>topic_name)
+  end
+
+  def prefetch(size)
+    # noop
   end
 end
 
