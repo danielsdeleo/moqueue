@@ -23,7 +23,7 @@ module Moqueue
     end
 
     # Overloads the class-level method calls typically used by AMQP code
-    # such as MQ.direct, MQ.queue, MQ.topic, etc.
+    # such as Channel.direct, Channel.queue, Channel.topic, etc.
     def overload_amqp
       require MOQUEUE_ROOT + "moqueue/overloads"
     end

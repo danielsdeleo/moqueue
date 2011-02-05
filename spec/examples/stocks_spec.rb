@@ -12,7 +12,7 @@ describe Moqueue, "when running the stocks example" do
       end
 
       def publish_stock_prices
-        mq = MQ.new
+        mq = AMQP::Channel.new
         counter = 0
         EM.add_periodic_timer(0.1){
           counter += 1
@@ -28,7 +28,7 @@ describe Moqueue, "when running the stocks example" do
       end
 
       def watch_appl_stock
-        mq = MQ.new
+        mq = AMQP::Channel.new
         @apple_queue = mq.queue('apple stock')
         @apple_queue.bind(mq.topic('stocks'), :key => 'usd.appl').subscribe{ |price|
           log 'apple stock', price
@@ -36,7 +36,7 @@ describe Moqueue, "when running the stocks example" do
       end
 
       def watch_us_stocks
-        mq = MQ.new
+        mq = AMQP::Channel.new
         @us_stocks = mq.queue('us stocks')
         @us_stocks.bind(mq.topic('stocks'), :key => 'usd.*').subscribe{ |info, price|
           log 'us stock', info.routing_key, price

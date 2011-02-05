@@ -32,10 +32,9 @@ describe ObjectMethods do
     @exchange.publish("FTW")
   end
 
-  it "should allow for overloading AMQP and MQ" do
+  it "should allow for overloading AMQP" do
     overload_amqp
     defined?(AMQP).should be_true
-    defined?(MQ).should be_true
   end
 
   it "should provide a convenience method for creating mock queues" do

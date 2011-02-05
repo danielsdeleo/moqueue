@@ -15,14 +15,14 @@ describe Moqueue, "when running the ack example" do
 
   def run_ack_example(&perform_ack)
     AMQP.start(:host => 'localhost') do
-      MQ.queue('awesome').publish('Totally rad 1')
-      MQ.queue('awesome').publish('Totally rad 2')
-      MQ.queue('awesome').publish('Totally rad 3')
+      AMQP::Channel.queue('awesome').publish('Totally rad 1')
+      AMQP::Channel.queue('awesome').publish('Totally rad 2')
+      AMQP::Channel.queue('awesome').publish('Totally rad 3')
 
       i = 0
 
       # Stopping after the second item was acked will keep the 3rd item in the queue
-      MQ.queue('awesome').subscribe(:ack => true) do |h,m|
+      AMQP::Channel.queue('awesome').subscribe(:ack => true) do |h,m|
         if (i+=1) == 3
           #puts 'Shutting down...'
           AMQP.stop{ EM.stop }
@@ -52,7 +52,7 @@ describe Moqueue, "when running the ack example" do
     Timeout::timeout(2) do
       run_ack_example {|h| h.ack }
     end
-    q = MQ.queue('awesome')
+    q = AMQP::Channel.queue('awesome')
     q.should have(3).acked_messages
     q.received_ack_for_message?('Totally rad 1').should be_true
     q.received_ack_for_message?('Totally rad 2').should be_true
@@ -65,7 +65,7 @@ describe Moqueue, "when running the ack example" do
         EM.next_tick { h.ack }
       end
     end
-    q = MQ.queue('awesome')
+    q = AMQP::Channel.queue('awesome')
     q.should have(3).acked_messages
     q.received_ack_for_message?('Totally rad 1').should be_true
     q.received_ack_for_message?('Totally rad 2').should be_true
@@ -84,7 +84,7 @@ describe Moqueue, "when running the ack example" do
           })
       end
     end
-    q = MQ.queue('awesome')
+    q = AMQP::Channel.queue('awesome')
     q.should have(3).acked_messages
     q.received_ack_for_message?('Totally rad 1').should be_true
     q.received_ack_for_message?('Totally rad 2').should be_true

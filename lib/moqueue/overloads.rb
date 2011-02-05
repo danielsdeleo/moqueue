@@ -1,47 +1,7 @@
 require "eventmachine"
 
-class MQ
-
-  class << self
-    def queue(name)
-      Moqueue::MockQueue.new(name)
-    end
-
-    def direct(name, opts={})
-      Moqueue::MockExchange.new(opts.merge(:direct=>name))
-    end
-
-    def fanout(name, opts={})
-      Moqueue::MockExchange.new(opts.merge(:fanout=>name))
-    end
-  end
-
-  def initialize(*args)
-  end
-
-  def direct(name, opts = {})
-    Moqueue::MockExchange.new(opts.merge(:direct => name))
-  end
-
-  def fanout(name, opts = {})
-    Moqueue::MockExchange.new(opts.merge(:fanout => name))
-  end
-
-  def queue(name, opts = {})
-    Moqueue::MockQueue.new(name)
-  end
-
-  def topic(topic_name, opts = {})
-    Moqueue::MockExchange.new(:topic=>topic_name)
-  end
-
-  def prefetch(size)
-    # noop
-  end
-end
 
 module AMQP
-
   class << self
     attr_reader :closing
     alias :closing? :closing
@@ -58,5 +18,44 @@ module AMQP
   end
 
   def self.connect(*args)
+  end
+
+  class Channel
+    class << self
+      def queue(name)
+        Moqueue::MockQueue.new(name)
+      end
+
+      def direct(name, opts={})
+        Moqueue::MockExchange.new(opts.merge(:direct=>name))
+      end
+
+      def fanout(name, opts={})
+        Moqueue::MockExchange.new(opts.merge(:fanout=>name))
+      end
+    end
+
+    def initialize(*args)
+    end
+
+    def direct(name, opts = {})
+      Moqueue::MockExchange.new(opts.merge(:direct => name))
+    end
+
+    def fanout(name, opts = {})
+      Moqueue::MockExchange.new(opts.merge(:fanout => name))
+    end
+
+    def queue(name, opts = {})
+      Moqueue::MockQueue.new(name)
+    end
+
+    def topic(topic_name, opts = {})
+      Moqueue::MockExchange.new(:topic=>topic_name)
+    end
+
+    def prefetch(size)
+      # noop
+    end
   end
 end

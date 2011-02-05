@@ -19,11 +19,11 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
     AMQP.start { EM.stop }
   end
 
-  it "should provide a MQ.queue class method" do
-    MQ.queue('FTW').should be_a(Moqueue::MockQueue)
+  it "should provide a AMQP::Channel.queue class method" do
+    AMQP::Channel.queue('FTW').should be_a(Moqueue::MockQueue)
   end
 
-  it "should emulate the behavior of MQ.closing?" do
+  it "should emulate the behavior of AMQP::Channel.closing?" do
     ensure_deferred_block_called
     AMQP.stop do
       deferred_block_called
@@ -32,32 +32,32 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
   end
 
   it "should create direct exchanges" do
-    MQ.new.direct("directamundo").should == MockExchange.new(:direct => "directamundo")
+    AMQP::Channel.new.direct("directamundo").should == MockExchange.new(:direct => "directamundo")
   end
 
   it "should create topic exchanges" do
-    MQ.new.topic("lolzFTW").should == MockExchange.new(:topic => "lolzFTW")
+    AMQP::Channel.new.topic("lolzFTW").should == MockExchange.new(:topic => "lolzFTW")
   end
 
   it "should create topic exchanges with options" do
-    MQ.new.topic("optsFTW", {}).should == MockExchange.new(:topic => "optsFTW")
+    AMQP::Channel.new.topic("optsFTW", {}).should == MockExchange.new(:topic => "optsFTW")
   end
 
-  it "should provide a MQ.direct class method" do
-    MQ.direct("direct", :durable=>true).should be_a(Moqueue::MockExchange)
+  it "should provide a AMQP::Channel.direct class method" do
+    AMQP::Channel.direct("direct", :durable=>true).should be_a(Moqueue::MockExchange)
   end
 
-  it "should provide a MQ.fanout class method" do
-    MQ.fanout("fanout", :durable=>true).should be_a(Moqueue::MockExchange)
+  it "should provide a AMQP::Channel.fanout class method" do
+    AMQP::Channel.fanout("fanout", :durable=>true).should be_a(Moqueue::MockExchange)
   end
 
-  it "should create a named fanout queue via MQ.fanout" do
-    fanout = MQ.fanout("SayMyNameSayMyName", :durable=>true)
+  it "should create a named fanout queue via AMQP::Channel.fanout" do
+    fanout = AMQP::Channel.fanout("SayMyNameSayMyName", :durable=>true)
     fanout.should be_a(Moqueue::MockExchange)
     fanout.fanout.should == "SayMyNameSayMyName"
   end
 
   it "should ignore #prefetch but at least raise an error" do
-    lambda { MQ.new.prefetch(1337) }.should_not raise_error
+    lambda { AMQP::Channel.new.prefetch(1337) }.should_not raise_error
   end
 end

@@ -9,20 +9,20 @@ describe Moqueue, "when testing the ping pong example" do
 
       # AMQP.logging = true
 
-      amq = MQ.new
+      amq = AMQP::Channel.new
       EM.add_periodic_timer(0.1){
         @counter_val = counter
         capture_output @counter_val, :sending, 'ping'
         amq.queue('one').publish('ping')
       }
 
-      amq = MQ.new
+      amq = AMQP::Channel.new
       amq.queue('one').subscribe{ |msg|
         capture_output @counter_val, 'one', :received, msg, :sending, 'pong'
         amq.queue('two').publish('pong')
       }
 
-      amq = MQ.new
+      amq = AMQP::Channel.new
       amq.queue('two').subscribe{ |msg|
         capture_output @counter_val, 'two', :received, msg
       }

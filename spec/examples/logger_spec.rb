@@ -52,7 +52,7 @@ describe Moqueue, "when running the logger example" do
 
       print(opts)
       unless MyLoggerRulez.disabled?
-        MQ.fanout('logging', :durable => true).publish Marshal.dump(opts)
+        AMQP::Channel.fanout('logging', :durable => true).publish Marshal.dump(opts)
       end
 
       opts
@@ -126,8 +126,8 @@ describe Moqueue, "when running the logger example" do
   def run_server
     AMQP.start(:host => 'localhost') do
 
-      @server_queue = MQ.queue('logger')
-      @server_queue.bind(MQ.fanout('logging', :durable => true)).subscribe do |msg|
+      @server_queue = AMQP::Channel.queue('logger')
+      @server_queue.bind(AMQP::Channel.fanout('logging', :durable => true)).subscribe do |msg|
         msg = Marshal.load(msg)
       end
     end
