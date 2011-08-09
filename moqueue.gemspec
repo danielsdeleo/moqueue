@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{moqueue}
-  s.version = "0.1.5"
+  s.version = "0.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel DeLeo"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "lib/moqueue/mock_exchange.rb",
     "lib/moqueue/mock_headers.rb",
     "lib/moqueue/mock_queue.rb",
+    "lib/moqueue/mock_session.rb",
     "lib/moqueue/object_methods.rb",
     "lib/moqueue/overloads.rb",
     "moqueue.gemspec",
@@ -44,6 +45,7 @@ Gem::Specification.new do |s|
     "spec/unit/mock_exchange_spec.rb",
     "spec/unit/mock_headers_spec.rb",
     "spec/unit/mock_queue_spec.rb",
+    "spec/unit/mock_session_spec.rb",
     "spec/unit/moqueue_spec.rb",
     "spec/unit/object_methods_spec.rb",
     "spec/unit/overloads_spec.rb"
