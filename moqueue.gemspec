@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
     "lib/moqueue/object_methods.rb",
     "lib/moqueue/overloads.rb",
     "moqueue.gemspec",
-    "moqueue.tmproj",
     "spec/examples/ack_spec.rb",
     "spec/examples/basic_usage_spec.rb",
     "spec/examples/example_helper.rb",
