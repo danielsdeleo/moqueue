@@ -20,6 +20,10 @@ module AMQP
   def self.connect(*args)
   end
 
+  def self.connection
+    Moqueue::MockSession.new
+  end
+
   class Channel
     class << self
       def queue(name)
