@@ -77,4 +77,8 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
   it "should stub .connection" do
     AMQP.connection.should be_a(Moqueue::MockSession)
   end
+
+  it "should stub #on_error" do
+    AMQP::Channel.new.on_error.should be_nil
+  end
 end
