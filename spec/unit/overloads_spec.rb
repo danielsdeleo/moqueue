@@ -19,6 +19,19 @@ describe "AMQP and MQ", "when overloaded by moqueue/overloads" do
     AMQP.start { EM.stop }
   end
 
+  it "should create a stubbed Channel.new" do
+    AMQP::Channel.new.should be_a(AMQP::Channel)
+  end
+
+  it "should emulate the behavior of Channel.new by yielding to a block" do
+    message = "problem in block"
+    begin
+      AMQP::Channel.new { |channel| raise RuntimeError.new(message) }.should raise_error(RuntimeError.new(message))
+    rescue RuntimeError => re
+      re.message.should == message
+    end
+  end
+
   it "should provide a AMQP::Channel.queue class method" do
     AMQP::Channel.queue('FTW').should be_a(Moqueue::MockQueue)
   end

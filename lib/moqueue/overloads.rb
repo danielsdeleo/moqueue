@@ -39,7 +39,8 @@ module AMQP
       end
     end
 
-    def initialize(*args)
+    def initialize(*args, &block)
+      yield self if block_given?
     end
 
     def direct(name, opts = {})
