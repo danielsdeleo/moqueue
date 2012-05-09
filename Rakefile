@@ -1,5 +1,32 @@
+# encoding: utf-8
+
+require 'rubygems'
 require "spec/rake/spectask"
-require "rake/rdoctask"
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+require 'rake'
+require 'jeweler'
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name        = "moqueue"
+    gem.homepage    = "https://github.com/customink/moqueue"
+    gem.license     = "MIT"
+    gem.summary     = "Mocktacular Companion to AMQP Library. Happy TATFTing!"
+    gem.description = gem.summary
+    gem.email       = ["dan@kallistec.com"]
+    gem.authors     = ["Daniel DeLeo"]
+  end
+rescue LoadError
+  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+end
 
 task :default => :spec
 
@@ -9,56 +36,12 @@ Spec::Rake::SpecTask.new do |t|
   t.fail_on_error = false
 end
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |s|
-    s.name = "moqueue"
-    s.summary = "Mocktacular Companion to AMQP Library. Happy TATFTing!"
-    s.email = "dan@kallistec.com"
-    s.homepage = "http://github.com/danielsdeleo/moqueue"
-    s.description = "Mocktacular Companion to AMQP Library. Happy TATFTing!"
-    s.authors = ["Daniel DeLeo"]
-    s.files =  FileList["[A-Za-z]*", "{lib,spec}/**/*"]
-    s.rubyforge_project = "moqueue"
-    s.add_dependency("amqp", "~> 0.8.0.rc14")
-  end
-rescue LoadError
-  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
-end
+require 'rdoc/task'
+Rake::RDocTask.new do |rdoc|
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
-# These are new tasks
-begin
-  require 'jeweler/rubyforge_tasks'
-  require 'rake/contrib/sshpublisher'
-
-  Jeweler::RubyforgeTasks.new
-
-  namespace :rubyforge do
-
-    desc "Release gem and RDoc documentation to RubyForge"
-    task :release => ["rubyforge:release:gem", "rubyforge:release:docs"]
-
-    namespace :release do
-      desc "Publish RDoc to RubyForge."
-      task :docs => [:rdoc] do
-        config = YAML.load(
-            File.read(File.expand_path('~/.rubyforge/user-config.yml'))
-        )
-
-        host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/moqueue/"
-        local_dir = 'rdoc'
-
-        Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
-      end
-    end
-  end
-rescue LoadError
-  puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
-end
-
-Rake::RDocTask.new do |rd|
-  rd.main = "README.rdoc"
-  rd.rdoc_files.include("README.rdoc", "lib/**/*.rb")
-  rd.rdoc_dir = "rdoc"
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "shipping_helper #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
