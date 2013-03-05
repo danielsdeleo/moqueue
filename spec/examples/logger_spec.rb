@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Moqueue, "when running the logger example" do
-  
+
   class MyLoggerRulez
     def initialize *args, &block
       opts = args.pop if args.last.is_a? Hash
@@ -52,7 +52,7 @@ describe Moqueue, "when running the logger example" do
 
       print(opts)
       unless MyLoggerRulez.disabled?
-        MQ.fanout('logging', :durable => true).publish Marshal.dump(opts)
+        AMQP::Channel.fanout('logging', :durable => true).publish Marshal.dump(opts)
       end
 
       opts
@@ -71,7 +71,7 @@ describe Moqueue, "when running the logger example" do
       end
     end
     alias :printer :print
-    
+
     def self.printer &block
       @printer = block if block
       @printer
@@ -80,27 +80,27 @@ describe Moqueue, "when running the logger example" do
     def self.disabled?
       !!@disabled
     end
-    
+
     def self.enable
       @disabled = false
     end
-    
+
     def self.disable
       @disabled = true
     end
   end
-  
-  
+
+
   before(:all) do
     overload_amqp
   end
-  
-  
+
+
   def run_client
     AMQP.start do
       log = MyLoggerRulez.new
       log.debug 'its working!'
-    
+
       log = MyLoggerRulez.new do |msg|
         #require 'pp'
         #pp msg
@@ -122,17 +122,17 @@ describe Moqueue, "when running the logger example" do
       #AMQP.stop{ EM.stop }
     end
   end
-  
+
   def run_server
     AMQP.start(:host => 'localhost') do
-      
-      @server_queue = MQ.queue('logger')
-      @server_queue.bind(MQ.fanout('logging', :durable => true)).subscribe do |msg|
+
+      @server_queue = AMQP::Channel.queue('logger')
+      @server_queue.bind(AMQP::Channel.fanout('logging', :durable => true)).subscribe do |msg|
         msg = Marshal.load(msg)
       end
     end
   end
-  
+
   it "should get the expected results" do
     EM.run do
       threads = []
@@ -142,18 +142,18 @@ describe Moqueue, "when running the logger example" do
       threads << Thread.new do
         run_client
       end
-      
+
       EM.add_timer(0.1) do
         @server_queue.should have(9).received_messages
         webserver_log = Marshal.load(@server_queue.received_messages.last)
         webserver_log[:tags].should == [:webserver, :GET]
         webserver_log[:msg].should == "Request for /"
-        
+
         EM.stop
         threads.each { |t| t.join }
       end
-      
+
     end
   end
-  
+
 end

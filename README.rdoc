@@ -5,26 +5,26 @@ Moqueue is a library for mocking the various objects that make up the ruby AMQP[
 
   require "moqueue"
   overload_amqp
-  
-  mq = MQ.new
-  => #<MQ:0x1197ae8>
-  
+
+  mq = AMQP::Channel.new
+  => #<AMQP::Channel:0x00000100dd4f18>
+
   queue = mq.queue("mocktacular")
   => #<Moqueue::MockQueue:0x1194550 @name="mocktacular">
-  
+
   topic = mq.topic("lolz")
   => #<Moqueue::MockExchange:0x11913dc @topic="lolz">
-  
+
   queue.bind(topic, :key=> "cats.*")
   => #<Moqueue::MockQueue:0x1194550 @name="mocktacular">
-  
+
   queue.subscribe {|header, msg| puts [header.routing_key, msg]}
   => nil
-  
+
   topic.publish("eatin ur foodz", :key => "cats.inUrFridge")
   # cats.inUrFridge
   # eatin ur foodz
-  
+
 Note that in this example, we didn't have to deal with <tt>AMQP.start</tt> or <tt>EM.run</tt>. This should be ample evidence that you should run higher level tests without any mocks or stubs so you can be sure everything works with real MQ objects. With that said, <tt>#overload_amqp</tt> does overload the <tt>AMQP.start</tt> method, so you can use Moqueue for mid-level testing if desired. Have a look at the spec/examples directory to see Moqueue running some of AMQP's examples in overload mode for more demonstration of this.
 
 = Custom Rspec Matchers
@@ -37,8 +37,8 @@ Rspec users will probably want something a bit more natural language-y. You got 
 = What's Working? What's Not?
 As you can tell from the example above, quite a bit is working. This includes direct exchanges where you call <tt>#publish</tt> and <tt>#subscribe</tt> on the same queue, acknowledgements, topic exchanges, and fanout exchanges.
 
-What's not working: 
-* RPC exchanges. 
+What's not working:
+* RPC exchanges.
 * The routing key matching algorithm works for common cases, including "*" and "#" wildcards in the binding key. If you need anything more complicated than that, Moqueue is not guaranteed to do the right thing.
 * Receiving acks when using topic exchanges works only if you subscribe before publishing.
 
