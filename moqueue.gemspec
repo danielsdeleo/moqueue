@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Daniel DeLeo"]
   s.date = %q{2009-09-21}
   s.description = %q{Mocktacular Companion to AMQP Library. Happy TATFTing!}
+  s.license = "MIT"
   s.email = %q{dan@kallistec.com}
   s.extra_rdoc_files = [
     "README.rdoc"
@@ -72,7 +73,6 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
