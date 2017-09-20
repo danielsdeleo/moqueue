@@ -50,7 +50,7 @@ module Moqueue
     end
     
     def unsubscribe
-      true
+      @subscribe_block = nil
     end
 
     def prefetch(size)

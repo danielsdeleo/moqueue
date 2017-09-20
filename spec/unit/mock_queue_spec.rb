@@ -94,6 +94,13 @@ describe MockQueue do
     @queue.should respond_to(:unsubscribe)
   end
 
+  it "should prevent double subscribe errors if unsubscribe is called inbetween" do
+    @queue.subscribe { |msg| "once" }
+    @queue.unsubscribe
+    @queue.subscribe { |msg| "second" }.should_not raise_error(DoubleSubscribeError)
+  end
+  
+
   it "should ignore #prefetch but at least raise an error" do
     lambda { @queue.prefetch(1337) }.should_not raise_error
   end
